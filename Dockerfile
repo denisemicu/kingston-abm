@@ -19,18 +19,19 @@ RUN pip3 install ansible
 
 
 # Install Miniconda
+# Ignore all of this since it doesn't work
 
 # https://conda.io/projects/conda/en/latest/user-guide/install/rpm-debian.html
 
-RUN apt install curl -y
-RUN curl https://repo.anaconda.com/pkgs/misc/gpgkeys/anaconda.asc | gpg --dearmor > conda.gpg
-RUN install -o root -g root -m 644 conda.gpg /usr/share/keyrings/conda-archive-keyring.gpg
-RUN gpg --keyring /usr/share/keyrings/conda-archive-keyring.gpg --no-default-keyring --fingerprint 34161F5BF5EB1D4BFBBB8F0A8AEB4F8B29D82806
-RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/conda-archive-keyring.gpg] https://repo.anaconda.com/pkgs/misc/debrepo/conda stable main" > /etc/apt/sources.list.d/conda.list
-RUN apt update
-RUN apt install conda -y
-ENV PATH="/opt/conda/bin:${PATH}"
-RUN /opt/conda/bin/conda init bash
+# RUN apt install curl -y
+# RUN curl https://repo.anaconda.com/pkgs/misc/gpgkeys/anaconda.asc | gpg --dearmor > conda.gpg
+# RUN install -o root -g root -m 644 conda.gpg /usr/share/keyrings/conda-archive-keyring.gpg
+# RUN gpg --keyring /usr/share/keyrings/conda-archive-keyring.gpg --no-default-keyring --fingerprint 34161F5BF5EB1D4BFBBB8F0A8AEB4F8B29D82806
+# RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/conda-archive-keyring.gpg] https://repo.anaconda.com/pkgs/misc/debrepo/conda stable main" > /etc/apt/sources.list.d/conda.list
+# RUN apt update
+# RUN apt install conda -y
+# ENV PATH="/opt/conda/bin:${PATH}"
+# RUN /opt/conda/bin/conda init bash
 
 
 # Install GNU Parallel
@@ -42,8 +43,11 @@ RUN apt install parallel -y
 
 RUN apt install git -y
 
+# Install cmake
+RUN apt-get -y install cmake
 
 RUN mkdir /src
 
-CMD ansible-playbook -v --extra-vars "host=localhost" /src/ansible/playbooks/covid19sim.yml && sleep infinity
+RUN git clone https://github.com/denisemicu/kingston-abm.git ~/denise
+CMD ansible-playbook -v --extra-vars "host=localhost" ~/denise/ansible/playbooks/covid19sim.yml && sleep infinity
 #CMD sleep infinity
