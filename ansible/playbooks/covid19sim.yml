@@ -4,12 +4,6 @@
 
   tasks:
 
-
-    - name: Create a new viritual environment
-      shell: /opt/conda/bin/conda create -n covisim python=3.8 -y
-      args:
-        executable: /bin/bash
-
     - name: Clone ctt module, required to run simulator
       git:
         repo: https://github.com/mila-iqia/COVI-ML
@@ -25,7 +19,7 @@
     - name: Use fixed setup.py
       copy:
         src: files/setup.py
-        dest: ~/COVI-ML
+        dest: ~/COVI-MLx
 
     - name: Version of ctt module should be commit hash
       lineinfile:
@@ -34,7 +28,7 @@
         line: version='19986f7427a7a643eb05fb41e5ed4dd113362cd6',
 
     - name: Install ctt module
-      shell: cd ~/COVI-ML && /opt/conda/bin/conda run -n covisim pip install -e .
+      shell: cd ~/COVI-ML && pip install -e .
 
     - name: Checkout a viable commit
       git:
@@ -50,7 +44,7 @@
         line: version='8a8b9b5aa5ac4c13dd7220d856119e3916148622',
 
     - name: Install simulator 
-      shell: /opt/conda/bin/conda run -n covisim pip install -e .
+      shell: pip install -e .
       args:
         chdir: ~/COVI-AgentSim
 
